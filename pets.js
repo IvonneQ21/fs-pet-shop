@@ -65,31 +65,37 @@ if(cmd === 'read') {
   });
 } else if (cmd === 'create') {
   // let newPet = {};
-  let petAge = parseInt(process.argv[3]);
-  let petKind = process.argv[4];
-  let petName = process.argv[5];
+  let age = parseInt(process.argv[3]);
+  let kind = process.argv[4];
+  let name = process.argv[5];
   // let newPet = {petAge, petKind, petName};
 
   fs.readFile(petsPath, 'utf8', function(readErr, data) {
-
+    let curPets = JSON.parse(data);
 
     if(readErr) {
       throw readErr;
     }
-    let curPets = JSON.parse(data);
+    // let petsJSON = JSON.stringify(curPet);
 
-    if(petAge && petKind && petName) {
+let newPet = {age, kind, name};
+    if(age && kind && name) {
       // newPet.age = petAge;
       // newPet.kind = petKind;
       // newPet.Name = petName;
-      let newPet = {petAge, petKind, petName};
+      // let newPet = {age, kind, name};
 
-      console.log(newPet);
+      // console.log(newPet);
       curPets.push(newPet);
 
+
       let petsJSON = JSON.stringify(curPets);
-
-
+      fs.writeFile(petsPath, petsJSON, function(writeErr) {
+            if(writeErr) {
+              throw writeErr;
+            }
+            console.log(newPet);
+          });
     } else {
       console.error(`Usage: ${node} ${file} create AGE KIND NAME`);
       process.exit(1);
@@ -105,14 +111,38 @@ if(cmd === 'read') {
   // NOTE: the data that we are passing as 2nd param to the writeFile function in this case is the
   // petsJSON so that the prev petsJSON is replace.
 
-    fs.writeFile(petsPath, petsJSON, function(writeErr) {
-          if(writeErr) {
-            throw writeErr;
-          }
-          console.log(newPet);
-        });
+    // fs.writeFile(petsPath, petsJSON, function(writeErr) {
+    //       if(writeErr) {
+    //         throw writeErr;
+    //       }
+    //       console.log(newPet);
+    //     });
   });
-} else {
+// }
+//trying to do update and destroy
+ // else if( cmd === 'update'){
+ //    let upIndex = process.argv[3];
+ //    let upAge = parseInt(process.argv[4]);
+ //    let upKind = process.argv[5];
+ //    let upName = process.arg[6];
+ //
+ //    if( upIndex && upAge && upKind && upName ){
+ //      let updatePet = {}
+ //    } else {
+ //
+ //      console.log(`Usage: ${node} ${file} update INDEX AGE KIND NAME`);
+ //    }
+
+  //  fs.readFile(petsPath, 'utf8', function(readErr, data){
+  //    if(readErr){
+  //      throw readErr;
+  //    }
+  //    console.log("you are in the update part");
+  //    let curPets = JSON.parse(data);
+  //  })
+
+ }
+ else {
    console.error(`Usage: ${node} ${file} [read | create | update | destroy]`);
    process.exit(1);
 }
