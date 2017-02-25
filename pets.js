@@ -1,24 +1,24 @@
  'use strict';
  // As per our instructions this file will receive the following commands :
  //Create
- var fs = require('fs');
- var path = require('path');
+ let fs = require('fs');
+ let path = require('path');
  //creates path to the present working directory.
- var petsPath = path.join(__dirname, 'pets.json');
- // var express = require('express');
+ let petsPath = path.join(__dirname, 'pets.json');
+ // let express = require('express');
  // this allows me to see what items are located in the process.argv
  // console.log(process.argv);
 
 //process.argv property returns an array containing the command line arguments
 //passed when the Node.js process was launched.
-var node = path.basename(process.argv[0]);
+let node = path.basename(process.argv[0]);
 // accessing the args that was passes to node at 0.
-var file= path.basename(process.argv[1]);
+let file= path.basename(process.argv[1]);
 //accessing the arg that was passed to node at 1. in this case this will be the
 //file name.
 
 //info below referes to the process arguments.
-var cmd = process.argv[2];
+let cmd = process.argv[2];
 //accessing the arg that was passed after the node.js process was launched.
 //this will be the command that we pass either read, create, update or delete
 //as per our assignement.
@@ -29,7 +29,7 @@ var cmd = process.argv[2];
 
 // writting the read subcommand.
 // if(cmd === 'read') {
-//   var petIndex = process.argv[3];
+//   let petIndex = process.argv[3];
 //
 //  fs.readFile(petsPath, 'utf8', function(err, data) {
 //   let curPets = JSON.parse(data);
