@@ -29,46 +29,78 @@ app.get('/pets', function(req, res){
   // console.log(curPets);
   });
 });
+// allowing server to send individual records based on the path and the item located
+//at the id. index of the array.
+//NOTE: the /:id (route parameter) is adding a dynamic route to the application. NOTE: id is a variable
+//name this can be anything.
 app.get('/pets/:id', function(req, res) {
-  fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
+  fs.readFile(petsPath, function(readErr, petsJSON) {
     if (readErr) {
       console.error(readErr.stack);
       return res.sendStatus(500);
     }
 
-    var id = Number.parseInt(req.params.id);
-    var responsePets = JSON.parse(petsJSON);
+    let id = parseInt(req.params.id);
+    //giving a variable name to the route of req.params.id
+    let responsePets = JSON.parse(petsJSON);
 
-    if (id < 0 || id >= responsePets.length || Number.isNaN(id)) {
+    if (id < 0 || id >= responsePets.length || isNaN(id)) {
       return res.sendStatus(404);
     }
 
-    res.set('Content-Type', 'text/plain');
+    res.set('Content-Type', 'application/json');
     res.send(responsePets[id]);
   });
 });
+
+// note might want to use bodyParser() and milter. //These are middleware.
+  app.post('/pets', function(req, res){
+    fs.readFile(petsPath, function(readErr, petsJSON) {
+      if(readErr) {
+        console.error(readErr.stack);
+        return res.sendStatus(400);
+      }
+      // creating the class of the req that must be passed.
+          let curPets = JSON.parse(petsJSON);
+          let givenPet = req.body;
+          //  console.log(givenPet);
+          if(!givenPet){
+            return res.sendStatus(400);
+          }
+          //simplifying the given body values;
+          let age = parseInt(req.body.age);
+          let kind = req.body.kind;
+          let name = req.body.name;
+          // req.body.pro appeds
+          //creatring the object.
+      if ( age && kind && name ) {
+        curPets.push(givenPet);
+      }
+        let newPetsJSON = JSON.stringify(curPets);
+
+        fs.writeFile(petsPath, newPetsJSON, function(writeErr) {
+          if(writeErr) {
+            console.error(writeErr.stack);
+            return res.sendStatus(500);
+          }
+          res.set('Content-Type', 'application/json');
+          res.send(responsePets[id]);
+          // console.log(givenPet);
+        });
+      // }
+    });
+  })
 app.use(function(req, res) {
   res.sendStatus(404);
 });
 app.listen(port, function() {
-  console.log('we are succesfully running ! yahhh!', port);
+  console.log('Listening on port', port);
 });
 
 
-//another way to writting the second part of the request.
-// app.get('/pets/:id', function(req, res){
-//   var petIndex = req.params.id;
-//   var numPets = pets.length;
-//
-//   if(petIndex >=0 && petIndex<numPets){
-//     res.send(pets[petIndex]);
-//   }
-//   else{
-//     return res.sendStatus(404);
-//     res.send('Not Found');
-//   }
-// });
-//
-// app.listen('8000', function(){
-//   console.log('Server 3000 started');
-// });
+
+// exporting the server.
+
+//attempting the bonus.
+
+module.exports = app;

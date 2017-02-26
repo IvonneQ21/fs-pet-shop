@@ -78,7 +78,9 @@ if(cmd === 'read') {
     }
     // let petsJSON = JSON.stringify(curPet);
 
-let newPet = {age, kind, name};
+    ls
+    let newPet = {age, kind, name};
+
     if(age && kind && name) {
       // newPet.age = petAge;
       // newPet.kind = petKind;
@@ -90,7 +92,8 @@ let newPet = {age, kind, name};
 
 
       let petsJSON = JSON.stringify(curPets);
-      fs.writeFile(petsPath, petsJSON, function(writeErr) {
+
+        fs.writeFile(petsPath, petsJSON, function(writeErr) {
             if(writeErr) {
               throw writeErr;
             }
