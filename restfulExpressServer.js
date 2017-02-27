@@ -14,7 +14,10 @@ let morgan = require('morgan');
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-//NOTE: can make this code more DRY by extracting the readFile and writeFile function. 
+//NOTE: can make this code more DRY by extracting the readFile and writeFile function.
+
+
+
 app.post('/pets', function(req, res){
   fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
     if (readErr) {
@@ -45,11 +48,22 @@ app.post('/pets', function(req, res){
       });
   });
 });
+app.get('/pets', function(req, res) {
+  fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
+    if(readErr) {
+      console.error(readErr.stack);
+      return res.sendStatus(500);
+    }
+    let responsePets = JSON.parse(petsJSON);
+    // res.set('Content-Type', 'application/json');
+    res.send(responsePets);
+  });
+});
 
 app.get('/pets/:id',  function(req, res){
   let id = req.params.id;
 
-  if(id<0 || Number.isNaN(id)){
+  if(id <0 || Number.isNaN(id)){
     return res.sendStatus(404);
   }
   fs.readFile(petsPath, 'utf8', function(readErr, petsJSON){
@@ -118,18 +132,18 @@ app.delete('/pets/:id', function(req, res) {
 		}
 		let id = parseInt(req.params.id);
 		let curPetsArr = JSON.parse(petsJSON);
-		console.log(curPersArr)
-		let reqPet = curPersArr[id];
-		curPersArr.splice(id, 1);
+		// let reqPet = curPersArr[id];
 
-		let petsString = JSON.stringify(curPersArr);
+		let modifiedArr = curPetsArr.splice(id, 1)[0];
+
+		let petsString = JSON.stringify(curPetsArr);
 
 		fs.writeFile(petsPath, petsString, function(writeErr) {
 			if(writeErr){
 				throw writeErr;
 			}
 			res.set('Content-Type', 'application/json');
-			res.send(reqPet);
+			res.send(modifiedArr);
 		});
 	})
 })
