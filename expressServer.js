@@ -9,6 +9,7 @@ let express = require('express');
 let app = express();
 let port = process.env.PORT || 8000;
 let bodyParser = require('body-parser');
+let morgan = require('morgan');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -16,9 +17,6 @@ app.disable('x-powered-by');
 
 app.get('/pets', function(req, res) {
   fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
-    // console.log(typeof petsJSON);
-    // let petIndex = req.params.id;
-    // let numPets = pets.length;
     if(readErr) {
       console.error(readErr.stack);
       return res.sendStatus(500);
