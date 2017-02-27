@@ -1,30 +1,12 @@
  'use strict';
- // As per our instructions this file will receive the following commands :
- //Create
- let fs = require('fs');
- let path = require('path');
- //creates path to the present working directory.
- let petsPath = path.join(__dirname, 'pets.json');
- // let express = require('express');
- // this allows me to see what items are located in the process.argv
- // console.log(process.argv);
+const fs = require('fs');
+const path = require('path');
+const petsPath = path.join(__dirname, 'pets.json');
+//dirname gives you the current directory name.
+const node = path.basename(process.argv[0]);
+const file= path.basename(process.argv[1]);
+const cmd = process.argv[2];
 
-//process.argv property returns an array containing the command line arguments
-//passed when the Node.js process was launched.
-let node = path.basename(process.argv[0]);
-// accessing the args that was passes to node at 0.
-let file= path.basename(process.argv[1]);
-//accessing the arg that was passed to node at 1. in this case this will be the
-//file name.
-
-//info below referes to the process arguments.
-let cmd = process.argv[2];
-//accessing the arg that was passed after the node.js process was launched.
-//this will be the command that we pass either read, create, update or delete
-//as per our assignement.
-
-// creeating a petIndex.
-// handling an petIndex that should be passed as we look into or obj.
 
 
 // writting the read subcommand.
@@ -53,8 +35,6 @@ if(cmd === 'read') {
 
  fs.readFile(petsPath, 'utf8', function(err, data) {
   let curPets = JSON.parse(data);
-  //NOTE: this converts the data to an object. parse de-stringifies the JSON to be a vanilla obj.
-  //  console.log(curPets);
    if (err) {
      throw err;
    } else if (petIndex) {
@@ -64,33 +44,20 @@ if(cmd === 'read') {
     }
   });
 } else if (cmd === 'create') {
-  // let newPet = {};
   let age = parseInt(process.argv[3]);
   let kind = process.argv[4];
   let name = process.argv[5];
+  // let newPet = {age, kind, name};
   // let newPet = {petAge, petKind, petName};
-
   fs.readFile(petsPath, 'utf8', function(readErr, data) {
-    let curPets = JSON.parse(data);
-
+    // let curPets = JSON.parse(data);
     if(readErr) {
       throw readErr;
     }
-    // let petsJSON = JSON.stringify(curPet);
-
-    ls
-    let newPet = {age, kind, name};
-
+      let curPets = JSON.parse(data);
     if(age && kind && name) {
-      // newPet.age = petAge;
-      // newPet.kind = petKind;
-      // newPet.Name = petName;
-      // let newPet = {age, kind, name};
-
-      // console.log(newPet);
+      let newPet = {age, kind, name};
       curPets.push(newPet);
-
-
       let petsJSON = JSON.stringify(curPets);
 
         fs.writeFile(petsPath, petsJSON, function(writeErr) {

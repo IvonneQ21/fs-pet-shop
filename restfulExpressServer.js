@@ -14,7 +14,7 @@ let morgan = require('morgan');
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-
+//NOTE: can make this code more DRY by extracting the readFile and writeFile function. 
 app.post('/pets', function(req, res){
   fs.readFile(petsPath, 'utf8', function(readErr, petsJSON) {
     if (readErr) {
@@ -47,6 +47,11 @@ app.post('/pets', function(req, res){
 });
 
 app.get('/pets/:id',  function(req, res){
+  let id = req.params.id;
+
+  if(id<0 || Number.isNaN(id)){
+    return res.sendStatus(404);
+  }
   fs.readFile(petsPath, 'utf8', function(readErr, petsJSON){
     if (readErr) {
     			console.error(readErr.stack);
@@ -70,8 +75,9 @@ app.get('/pets/:id',  function(req, res){
     }
   });
 });
-// patch is alloweing us to update the name of the pet at given id.
+// patch is allowing us to update the name of the pet at given id.
 app.patch('/pets/:id', function(req, res){
+
   fs.readFile(petsPath, 'utf8', function(readErr, petsJSON){
     if(readErr) {
       console.error(readErr.stack);

@@ -22,7 +22,7 @@ app.get('/pets', function(req, res) {
       return res.sendStatus(500);
     }
     let responsePets = JSON.parse(petsJSON);
-    res.set('Content-Type', 'application/json');
+    // res.set('Content-Type', 'application/json');
     res.send(responsePets);
   });
 });
@@ -41,14 +41,9 @@ app.get('/pets/:id', function(req, res) {
     let id = parseInt(req.params.id);
     let responsePets = JSON.parse(petsJSON);
 
-    if (!(responsePets[id])){
-      res.set('Content-Type', 'text/plain');
-      res.sendStatus(404);
-    }
     if (id < 0 || id >= responsePets.length || isNaN(id)) {
-      res.set('Content-Type', 'text/plain');
-      res.sendStatus(404);
-    } else {
+      return res.sendStatus(404);
+    }
     res.set('Content-Type', 'application/json');
     res.send(responsePets[id]);
   });
